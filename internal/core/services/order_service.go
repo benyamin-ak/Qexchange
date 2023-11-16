@@ -13,7 +13,7 @@ func NewOrderService() *OrderService {
 }
 
 func (os *OrderService) Buy(userID int, coinID int, amount float64) (int, error) {
-
+	return 0, nil
 }
 
 func (os *OrderService) Sell(userID int, coinID int, amount float64) (int, error) {
