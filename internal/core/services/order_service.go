@@ -49,7 +49,29 @@ func (os *OrderService) Buy(userID int, coinID int, amount float64) (int, error)
 }
 
 func (os *OrderService) Sell(userID int, coinID int, amount float64) (int, error) {
-	return 0, nil
+	o := models.Order{
+		UserID:    userID,
+		Side:      "sell",
+		CoinID:    coinID,
+		Quantity:  amount,
+		Timestamp: time.Now(),
+		Status:    models.OrderStatusActive,
+	}
+	ID, err := os.dbc.CommitOrder(o)
+	o.OrderID = ID
+	balance, price, commission, err := os.validateData(o)
+	if err != nil {
+		os.dbc.ChangeOrderStatus(o, models.OrderStatusCancelled)
+		return math.MinInt, err
+	}
+	o.Price = price
+	_ = commission
+	if balance < amount {
+		os.dbc.ChangeOrderStatus(o, models.OrderStatusCancelled)
+		return math.MinInt, errors.New("insufficient funds")
+	}
+	os.dbc.ChangeOrderStatus(o, models.OrderStatusCompleted)
+	return ID, nil
 }
 
 func (os *OrderService) Cancel(userID int, orderID int, userPassword string) error {
