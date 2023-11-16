@@ -26,22 +26,6 @@ func (os *OrderDBService) CommitOrder(models.Order) (int, error) {
 	return 0, nil
 }
 
-func (os *OrderDBService) ChangeOrderStatus(int, int) error {
-	return nil
-}
-
-func (os *OrderDBService) ValidateUser(int) error {
-	return nil
-}
-
-func (os *OrderDBService) ValidateCoin(int) error {
-	return nil
-}
-
-func (os *OrderDBService) ValidateOrder(int) error {
-	return nil
-}
-
-func (os *OrderDBService) ValidateOrderBelongsToUser(int, int) error {
+func (os *OrderDBService) ChangeOrderStatus(models.Order, int) error {
 	return nil
 }

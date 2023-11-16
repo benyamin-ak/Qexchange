@@ -12,13 +12,9 @@ type OrderCoreContract interface {
 }
 
 type OrderDBContract interface {
-	ValidateUser(int) error
-	ValidateCoin(int) error
-	ValidateOrder(int) error
-	ValidateOrderBelongsToUser(int, int) error
 	GetUserBalance(int) (float64, error)
 	GetCoinPrice(int) (float64, error)
 	GetCoinCommission(int) (float64, error)
 	CommitOrder(models.Order) (int, error)
-	ChangeOrderStatus(int, int) error
+	ChangeOrderStatus(models.Order, int) error
 }
