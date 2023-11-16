@@ -27,12 +27,10 @@ func (os *OrderService) Buy(userID int, coinID int, amount float64) (int, error)
 		Timestamp: time.Now(),
 		Status:    models.OrderStatusActive,
 	}
-	if err := os.validateData(o); err != nil {
+	balance, price, commission, err := os.validateData(o)
+	if err != nil {
 		return math.MinInt, err
 	}
-	balance := os.dbc.GetUserBalance(userID)
-	price := os.dbc.GetCoinPrice(coinID)
-	commission := os.dbc.GetCoinCommission(coinID)
 	_ = commission
 	if balance < amount*price {
 		return math.MinInt, errors.New("insufficient funds")
@@ -52,12 +50,18 @@ func (os *OrderService) Cancel(userID int, orderID int, userPassword string) err
 	return nil
 }
 
-func (os *OrderService) validateData(o models.Order) error {
-	if err := os.dbc.ValidateUser(o.UserID); err != nil {
-		return err
+func (os *OrderService) validateData(o models.Order) (float64, float64, float64, error) {
+	balance, err := os.dbc.GetUserBalance(o.UserID)
+	if err != nil {
+		return 0, 0, 0, err
 	}
-	if err := os.dbc.ValidateCoin(o.CoinID); err != nil {
-		return err
+	price, err := os.dbc.GetCoinPrice(o.CoinID)
+	if err != nil {
+		return 0, 0, 0, err
 	}
-	return nil
+	commission, err := os.dbc.GetCoinCommission(o.CoinID)
+	if err != nil {
+		return 0, 0, 0, err
+	}
+	return balance, price, commission, nil
 }
