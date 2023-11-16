@@ -1,5 +1,7 @@
 package services
 
+import "Qexchange/internal/core/models"
+
 type OrderDBService struct {
 	//infrastructure.OrderDBRepository
 }
@@ -20,11 +22,11 @@ func (os *OrderDBService) GetCoinCommission(int) (float64, error) {
 	return 0, nil
 }
 
-func (os *OrderDBService) CommitOrder(int, int, string, float64, float64, int) (int, error) {
+func (os *OrderDBService) CommitOrder(models.Order) (int, error) {
 	return 0, nil
 }
 
-func (os *OrderDBService) ChangeOrderStatus(int, string) error {
+func (os *OrderDBService) ChangeOrderStatus(int, int) error {
 	return nil
 }
 

@@ -1,6 +1,6 @@
 package contracts
 
-import models "Qexchange/internal/core/models"
+import "Qexchange/internal/core/models"
 
 type OrderCoreContract interface {
 	//buy(userID int, coinID int, amount float64) orderID error
