@@ -12,14 +12,14 @@ func NewOrderService() *OrderService {
 	}
 }
 
-func (os *OrderService) Buy(coinID int, amount float64) error {
-	return nil
+func (os *OrderService) Buy(coinID int, amount float64) (int, error) {
+	return 0, nil
 }
 
-func (os *OrderService) Sell(coinID int, amount float64) error {
-	return nil
+func (os *OrderService) Sell(coinID int, amount float64) (int, error) {
+	return 0, nil
 }
 
-func (os *OrderService) Cancel() error {
-	return nil
+func (os *OrderService) Cancel() (int, error) {
+	return 0, nil
 }

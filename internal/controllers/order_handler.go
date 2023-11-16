@@ -3,6 +3,8 @@ package controllers
 import (
 	"Qexchange/internal/core/contracts"
 	"Qexchange/internal/core/services"
+	"net/http"
+	"strconv"
 
 	echo "github.com/labstack/echo/v4"
 )
@@ -31,7 +33,15 @@ func DefineRoutes(e *echo.Echo) {
 }
 
 func (oh *OrderHandler) Buy(c echo.Context) error {
-	return nil
+	or := new(OrderRequest)
+	if err := c.Bind(or); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	orderID, err := oh.osc.Buy(or.CoinID, or.Amount)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	return c.JSON(http.StatusOK, "orderID: "+strconv.Itoa(orderID))
 }
 
 func (oh *OrderHandler) Sell(c echo.Context) error {
