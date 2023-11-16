@@ -29,7 +29,7 @@ func DefineRoutes(e *echo.Echo) {
 	oh := NewOrderHandler()
 	e.POST("/buy", oh.Buy)
 	e.POST("/sell", oh.Sell)
-	e.PUT("/cancel/:orderID", oh.Cancel)
+	e.PUT("/cancel", oh.Cancel)
 }
 
 func (oh *OrderHandler) Buy(c echo.Context) error {
@@ -37,7 +37,7 @@ func (oh *OrderHandler) Buy(c echo.Context) error {
 	if err := c.Bind(or); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	orderID, err := oh.osc.Buy(or.CoinID, or.Amount)
+	orderID, err := oh.osc.Buy(or.UserID, or.CoinID, or.Amount)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -49,7 +49,7 @@ func (oh *OrderHandler) Sell(c echo.Context) error {
 	if err := c.Bind(or); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	orderID, err := oh.osc.Sell(or.CoinID, or.Amount)
+	orderID, err := oh.osc.Sell(or.UserID, or.CoinID, or.Amount)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -65,6 +65,6 @@ func (oh *OrderHandler) Cancel(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	oh.osc.Cancel(orderIDInt)
+	oh.osc.Cancel(1, orderIDInt)
 	return c.JSON(http.StatusOK, "success")
 }
