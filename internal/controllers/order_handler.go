@@ -3,8 +3,8 @@ package controllers
 import (
 	"Qexchange/internal/core/contracts"
 	"Qexchange/internal/core/services"
+	"math"
 	"net/http"
-	"strconv"
 
 	echo "github.com/labstack/echo/v4"
 )
@@ -21,6 +21,18 @@ type CancelRequest struct {
 	UserPassword string `json:"user_password"`
 }
 
+type Response struct {
+	OrderID int    `json:"order_id"`
+	Error   string `json:"error"`
+}
+
+func NewResponse(orderID int, err error) Response {
+	return Response{
+		OrderID: orderID,
+		Error:   "",
+	}
+}
+
 type OrderHandler struct {
 	osc contracts.OrderCoreContract
 }
@@ -34,35 +46,35 @@ func NewOrderHandler() *OrderHandler {
 func (oh *OrderHandler) Buy(c echo.Context) error {
 	or := new(OrderRequest)
 	if err := c.Bind(or); err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
 	}
 	orderID, err := oh.osc.Buy(or.UserID, or.CoinID, or.Amount)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
 	}
-	return c.JSON(http.StatusOK, "orderID: "+strconv.Itoa(orderID))
+	return c.JSON(http.StatusOK, NewResponse(orderID, nil))
 }
 
 func (oh *OrderHandler) Sell(c echo.Context) error {
 	or := new(OrderRequest)
 	if err := c.Bind(or); err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
 	}
 	orderID, err := oh.osc.Sell(or.UserID, or.CoinID, or.Amount)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
 	}
-	return c.JSON(http.StatusOK, "orderID: "+strconv.Itoa(orderID))
+	return c.JSON(http.StatusOK, NewResponse(orderID, nil))
 }
 
 func (oh *OrderHandler) Cancel(c echo.Context) error {
 	cr := new(CancelRequest)
 	if err := c.Bind(cr); err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
 	}
 	err := oh.osc.Cancel(cr.UserID, cr.OrderID, cr.UserPassword)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
 	}
-	return c.JSON(http.StatusOK, "orderID: "+strconv.Itoa(cr.OrderID))
+	return c.JSON(http.StatusOK, NewResponse(math.MinInt, nil))
 }
