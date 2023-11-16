@@ -31,13 +31,6 @@ func NewOrderHandler() *OrderHandler {
 	}
 }
 
-func DefineRoutes(e *echo.Echo) {
-	oh := NewOrderHandler()
-	e.POST("/buy", oh.Buy)
-	e.POST("/sell", oh.Sell)
-	e.PUT("/cancel", oh.Cancel)
-}
-
 func (oh *OrderHandler) Buy(c echo.Context) error {
 	or := new(OrderRequest)
 	if err := c.Bind(or); err != nil {
