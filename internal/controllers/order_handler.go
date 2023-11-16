@@ -29,7 +29,7 @@ func DefineRoutes(e *echo.Echo) {
 	oh := NewOrderHandler()
 	e.POST("/buy", oh.Buy)
 	e.POST("/sell", oh.Sell)
-	e.POST("/cancel", oh.Cancel)
+	e.PUT("/cancel/:orderID", oh.Cancel)
 }
 
 func (oh *OrderHandler) Buy(c echo.Context) error {
@@ -57,5 +57,14 @@ func (oh *OrderHandler) Sell(c echo.Context) error {
 }
 
 func (oh *OrderHandler) Cancel(c echo.Context) error {
-	return nil
+	orderID := c.Param("orderID")
+	if orderID == "" {
+		return c.JSON(http.StatusBadRequest, "orderID is required")
+	}
+	orderIDInt, err := strconv.Atoi(orderID)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	oh.osc.Cancel(orderIDInt)
+	return c.JSON(http.StatusOK, "success")
 }

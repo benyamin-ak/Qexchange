@@ -5,7 +5,8 @@ type OrderCoreContract interface {
 	Buy(int, float64) (int, error)
 	//sell(coinID int, amount float64) orderID error
 	Sell(int, float64) (int, error)
-	Cancel() (int, error)
+	//cancel(orderID int) error
+	Cancel(int) error
 }
 
 type OrderDBContract interface {
