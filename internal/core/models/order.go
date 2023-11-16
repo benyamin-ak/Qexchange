@@ -10,5 +10,11 @@ type Order struct {
 	price     float64
 	coinID    int
 	timestamp time.Time
-	status    string
+	status    int
 }
+
+const (
+	OrderStatusActive = iota
+	OrderStatusCancelled
+	OrderStatusCompleted
+)
