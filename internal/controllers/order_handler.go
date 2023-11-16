@@ -15,6 +15,12 @@ type OrderRequest struct {
 	Amount float64 `json:"amount"`
 }
 
+type CancelRequest struct {
+	UserID       int    `json:"user_id"`
+	OrderID      int    `json:"order_id"`
+	UserPassword string `json:"user_password"`
+}
+
 type OrderHandler struct {
 	osc contracts.OrderCoreContract
 }
@@ -57,14 +63,13 @@ func (oh *OrderHandler) Sell(c echo.Context) error {
 }
 
 func (oh *OrderHandler) Cancel(c echo.Context) error {
-	orderID := c.Param("orderID")
-	if orderID == "" {
-		return c.JSON(http.StatusBadRequest, "orderID is required")
+	cr := new(CancelRequest)
+	if err := c.Bind(cr); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
 	}
-	orderIDInt, err := strconv.Atoi(orderID)
+	err := oh.osc.Cancel(cr.UserID, cr.OrderID, cr.UserPassword)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	oh.osc.Cancel(1, orderIDInt)
-	return c.JSON(http.StatusOK, "success")
+	return c.JSON(http.StatusOK, "orderID: "+strconv.Itoa(cr.OrderID))
 }
