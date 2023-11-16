@@ -20,6 +20,6 @@ func (os *OrderService) Sell(userID int, coinID int, amount float64) (int, error
 	return 0, nil
 }
 
-func (os *OrderService) Cancel(userID int, orderID int) error {
+func (os *OrderService) Cancel(userID int, orderID int, userPassword string) error {
 	return nil
 }
