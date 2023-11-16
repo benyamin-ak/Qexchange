@@ -1,6 +1,7 @@
 package services
 
 type OrderDBService struct {
+	//infrastructure.OrderDBRepository
 }
 
 func NewOrderDBService() *OrderDBService {
