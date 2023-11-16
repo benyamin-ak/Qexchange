@@ -1,5 +1,7 @@
 package contracts
 
+import models "Qexchange/internal/core/models"
+
 type OrderCoreContract interface {
 	//buy(userID int, coinID int, amount float64) orderID error
 	Buy(int, int, float64) (int, error)
@@ -17,6 +19,6 @@ type OrderDBContract interface {
 	GetUserBalance(int) (float64, error)
 	GetCoinPrice(int) (float64, error)
 	GetCoinCommission(int) (float64, error)
-	CommitOrder(int, int, string, float64, float64, int) (int, error)
-	ChangeOrderStatus(int, string) error
+	CommitOrder(models.Order) (int, error)
+	ChangeOrderStatus(int, int) error
 }
