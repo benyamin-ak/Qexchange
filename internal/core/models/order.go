@@ -6,7 +6,7 @@ type Order struct {
 	OrderID   int
 	UserID    int
 	Side      string
-	Quntity   float64
+	Quantity  float64
 	Price     float64
 	CoinID    int
 	Timestamp time.Time
