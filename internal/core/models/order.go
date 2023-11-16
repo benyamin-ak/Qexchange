@@ -3,14 +3,14 @@ package models
 import "time"
 
 type Order struct {
-	orderID   int
-	userID    int
-	side      string
-	quntity   float64
-	price     float64
-	coinID    int
-	timestamp time.Time
-	status    int
+	OrderID   int
+	UserID    int
+	Side      string
+	Quntity   float64
+	Price     float64
+	CoinID    int
+	Timestamp time.Time
+	Status    int
 }
 
 const (
