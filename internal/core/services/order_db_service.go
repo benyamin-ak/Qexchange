@@ -10,7 +10,7 @@ func NewOrderDBService() *OrderDBService {
 	return &OrderDBService{}
 }
 
-func (os *OrderDBService) GetUserBalance(int) (float64, error) {
+func (os *OrderDBService) GetUserBalance(int, int) (float64, error) {
 	return 0, nil
 }
 

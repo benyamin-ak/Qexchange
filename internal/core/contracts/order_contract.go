@@ -12,7 +12,7 @@ type OrderCoreContract interface {
 }
 
 type OrderDBContract interface {
-	GetUserBalance(int) (float64, error)
+	GetUserBalance(int, int) (float64, error)
 	GetCoinPrice(int) (float64, error)
 	GetCoinCommission(int) (float64, error)
 	CommitOrder(models.Order) (int, error)
