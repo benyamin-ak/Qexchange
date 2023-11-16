@@ -17,4 +17,5 @@ type OrderDBContract interface {
 	GetCoinCommission(int) (float64, error)
 	CommitOrder(models.Order) (int, error)
 	ChangeOrderStatus(models.Order, int) error
+	ValidateUserPassword(int, string) error
 }

@@ -29,3 +29,7 @@ func (os *OrderDBService) CommitOrder(models.Order) (int, error) {
 func (os *OrderDBService) ChangeOrderStatus(models.Order, int) error {
 	return nil
 }
+
+func (os *OrderDBService) ValidateUserPassword(int, string) error {
+	return nil
+}
