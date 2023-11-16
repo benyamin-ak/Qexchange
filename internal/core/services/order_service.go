@@ -27,18 +27,24 @@ func (os *OrderService) Buy(userID int, coinID int, amount float64) (int, error)
 		Timestamp: time.Now(),
 		Status:    models.OrderStatusActive,
 	}
+	ID, err := os.dbc.CommitOrder(o)
+	o.OrderID = ID
+	if err != nil {
+		os.dbc.ChangeOrderStatus(o, models.OrderStatusCancelled)
+		return math.MinInt, err
+	}
 	balance, price, commission, err := os.validateData(o)
 	if err != nil {
+		os.dbc.ChangeOrderStatus(o, models.OrderStatusCancelled)
 		return math.MinInt, err
 	}
+	o.Price = price
 	_ = commission
 	if balance < amount*price {
+		os.dbc.ChangeOrderStatus(o, models.OrderStatusCancelled)
 		return math.MinInt, errors.New("insufficient funds")
 	}
-	ID, err := os.dbc.CommitOrder(o)
-	if err != nil {
-		return math.MinInt, err
-	}
+	os.dbc.ChangeOrderStatus(o, models.OrderStatusCompleted)
 	return ID, nil
 }
 
@@ -51,15 +57,25 @@ func (os *OrderService) Cancel(userID int, orderID int, userPassword string) err
 }
 
 func (os *OrderService) validateData(o models.Order) (float64, float64, float64, error) {
-	balance, err := os.dbc.GetUserBalance(o.UserID)
+	var (
+		balance    float64
+		price      float64
+		commission float64
+		err        error
+	)
+	if o.Side == "buy" {
+		balance, err = os.dbc.GetUserBalance(o.UserID, 0 /* IRR asset ID*/)
+	} else {
+		balance, err = os.dbc.GetUserBalance(o.UserID, o.CoinID)
+	}
 	if err != nil {
 		return 0, 0, 0, err
 	}
-	price, err := os.dbc.GetCoinPrice(o.CoinID)
+	price, err = os.dbc.GetCoinPrice(o.CoinID)
 	if err != nil {
 		return 0, 0, 0, err
 	}
-	commission, err := os.dbc.GetCoinCommission(o.CoinID)
+	commission, err = os.dbc.GetCoinCommission(o.CoinID)
 	if err != nil {
 		return 0, 0, 0, err
 	}
