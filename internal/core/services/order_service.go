@@ -75,6 +75,18 @@ func (os *OrderService) Sell(userID int, coinID int, amount float64) (int, error
 }
 
 func (os *OrderService) Cancel(userID int, orderID int, userPassword string) error {
+	err := os.dbc.ValidateUserPassword(userID, userPassword)
+	if err != nil {
+		return err
+	}
+	o := models.Order{
+		UserID:  userID,
+		OrderID: orderID,
+	}
+	err = os.dbc.ChangeOrderStatus(o, models.OrderStatusCancelled)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
