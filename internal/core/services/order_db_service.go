@@ -26,8 +26,8 @@ func (os *OrderDBService) CreateOrder(models.Order) (int, error) {
 	return 0, nil
 }
 
-func (os *OrderDBService) SubmitOrder(models.Order) (int, error) {
-	return 0, nil
+func (os *OrderDBService) SubmitOrder(models.Order) {
+	return
 }
 
 func (os *OrderDBService) ChangeOrderStatus(models.Order, int) error {
