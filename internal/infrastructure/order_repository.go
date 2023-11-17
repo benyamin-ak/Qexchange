@@ -44,8 +44,13 @@ func (os *OrderRepository) GetCoinCommission(coinID int) (float64, error) {
 	return c, nil
 }
 
-func (os *OrderRepository) CreateOrder(models.Order) (int, error) {
-	return 0, nil
+func (os *OrderRepository) CreateOrder(o models.Order) (int, error) {
+	ID := -1
+	os.DB.Create(&o).Select("max(id)").Scan(&ID)
+	if ID == -1 {
+		return 0, errors.New("create order failed")
+	}
+	return ID, nil
 }
 
 func (os *OrderRepository) SubmitOrder(models.Order) {
