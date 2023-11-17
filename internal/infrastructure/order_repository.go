@@ -44,7 +44,7 @@ func (os *OrderRepository) GetCoinCommission(coinID int) (float64, error) {
 	return c, nil
 }
 
-func (os *OrderRepository) CreateOrder(o models.Order) (int, error) {
+func (os *OrderRepository) CreateOrder(o *models.Order) (int, error) {
 	ID := -1
 	os.DB.Create(&o).Select("max(id)").Scan(&ID)
 	if ID == -1 {
@@ -53,11 +53,11 @@ func (os *OrderRepository) CreateOrder(o models.Order) (int, error) {
 	return ID, nil
 }
 
-func (os *OrderRepository) SubmitOrder(models.Order) {
+func (os *OrderRepository) SubmitOrder(*models.Order) {
 
 }
 
-func (os *OrderRepository) ChangeOrderStatus(models.Order, string) error {
+func (os *OrderRepository) ChangeOrderStatus(*models.Order, string) error {
 	return nil
 }
 
@@ -65,6 +65,11 @@ func (os *OrderRepository) ValidateUserPassword(int, string) error {
 	return nil
 }
 
-func validateOrderBelongToUser() error {
+func (os *OrderRepository) validateOrderBelongToUser(o *models.Order, userID int) error {
+	order := &models.Order{}
+	os.DB.Model(&models.Order{}).Where("id = ?", o.OrderID).Scan(&order)
+	if order.UserID != userID {
+		return errors.New("order does not belong to user")
+	}
 	return nil
 }
