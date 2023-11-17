@@ -1,13 +1,19 @@
 package infrastructure
 
-import "Qexchange/internal/core/models"
+import (
+	"Qexchange/internal/core/models"
+
+	"gorm.io/gorm"
+)
 
 type OrderRepository struct {
-	//infrastructure.OrderDBRepository
+	gormDB *gorm.DB
 }
 
 func NewOrderRepository() *OrderRepository {
-	return &OrderRepository{}
+	return &OrderRepository{
+		// gorm connection
+	}
 }
 
 func (os *OrderRepository) GetUserBalance(int, int) (float64, error) {
@@ -30,7 +36,7 @@ func (os *OrderRepository) SubmitOrder(models.Order) {
 	return
 }
 
-func (os *OrderRepository) ChangeOrderStatus(models.Order, int) error {
+func (os *OrderRepository) ChangeOrderStatus(models.Order, string) error {
 	return nil
 }
 
