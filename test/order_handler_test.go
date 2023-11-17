@@ -52,3 +52,17 @@ func TestOrderHandlerSellInvalidRequest(t *testing.T) {
 		assert.Equal(t, "invalid request", responses[i].Error)
 	}
 }
+
+func TestOrderHandlerCancelInvalidRequest(t *testing.T) {
+	requests := []string{`{"user_id": 1,"order_id": 1}`, `{"user_id": 1,"user_password": "123456"}`, `{"order_id": 1,"user_password": "123456"}`}
+	responses := make([]*controllers.Response, len(requests))
+	for i, req := range requests {
+		resp, err := invalidReqGenertor(req)
+		assert.Nil(t, err)
+		responses[i] = &controllers.Response{}
+		err = json.NewDecoder(resp.Body).Decode(responses[i])
+		assert.Nil(t, err)
+		assert.Equal(t, math.MinInt, responses[i].OrderID)
+		assert.Equal(t, "invalid request", responses[i].Error)
+	}
+}
