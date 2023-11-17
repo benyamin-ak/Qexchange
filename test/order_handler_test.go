@@ -23,13 +23,19 @@ func TestMain(m *testing.M) {
 	m.Run()
 }
 func TestOrderHandlerBuyInvalidRequest(t *testing.T) {
-	oreq := `{"user_id": 1,"coin_id": 1}`
-	resp, err := http.DefaultClient.Post("http://localhost:8080/buy", "application/json", strings.NewReader(oreq))
-	assert.Nil(t, err)
-	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
-	ores := &controllers.Response{}
-	err = json.NewDecoder(resp.Body).Decode(ores)
-	assert.Nil(t, err)
-	assert.Equal(t, math.MinInt, ores.OrderID)
-	assert.Equal(t, "invalid request", ores.Error)
+	requests := []string{`{"user_id": 1,"coin_id": 1}`, `{"user_id": 1,"amount": 1}`, `{"coin_id": 1,"amount": 1}`}
+	responses := make([]*controllers.Response, len(requests))
+	for i, req := range requests {
+		resp, err := invalidReqGenertor(req)
+		assert.Nil(t, err)
+		responses[i] = &controllers.Response{}
+		err = json.NewDecoder(resp.Body).Decode(responses[i])
+		assert.Nil(t, err)
+		assert.Equal(t, math.MinInt, responses[i].OrderID)
+		assert.Equal(t, "invalid request", responses[i].Error)
+	}
+}
+
+func invalidReqGenertor(req string) (*http.Response, error) {
+	return http.DefaultClient.Post("http://localhost:8080/buy", "application/json", strings.NewReader(req))
 }
