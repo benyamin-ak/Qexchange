@@ -3,6 +3,7 @@ package controllers
 import (
 	"Qexchange/internal/core/contracts"
 	"Qexchange/internal/core/services"
+	"fmt"
 	"math"
 	"net/http"
 
@@ -27,6 +28,9 @@ type Response struct {
 }
 
 func NewResponse(orderID int, err error) Response {
+	if err == nil {
+		err = fmt.Errorf("")
+	}
 	return Response{
 		OrderID: orderID,
 		Error:   err.Error(),
