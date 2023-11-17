@@ -20,7 +20,7 @@ func NewOrderService() *OrderService {
 }
 
 func (os *OrderService) Buy(userID int, coinID int, amount float64) (int, error) {
-	o := models.Order{
+	o := &models.Order{
 		UserID:    userID,
 		Side:      "buy",
 		CoinID:    coinID,
@@ -49,7 +49,7 @@ func (os *OrderService) Buy(userID int, coinID int, amount float64) (int, error)
 }
 
 func (os *OrderService) Sell(userID int, coinID int, amount float64) (int, error) {
-	o := models.Order{
+	o := &models.Order{
 		UserID:    userID,
 		Side:      "sell",
 		CoinID:    coinID,
@@ -78,7 +78,7 @@ func (os *OrderService) Cancel(userID int, orderID int, userPassword string) err
 	if err != nil {
 		return err
 	}
-	o := models.Order{
+	o := &models.Order{
 		UserID:  userID,
 		OrderID: orderID,
 	}
@@ -89,7 +89,7 @@ func (os *OrderService) Cancel(userID int, orderID int, userPassword string) err
 	return nil
 }
 
-func (os *OrderService) validateData(o models.Order) (float64, float64, float64, error) {
+func (os *OrderService) validateData(o *models.Order) (float64, float64, float64, error) {
 	var (
 		balance    float64
 		price      float64
