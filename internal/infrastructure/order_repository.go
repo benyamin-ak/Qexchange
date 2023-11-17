@@ -54,7 +54,7 @@ func (os *OrderRepository) CreateOrder(o models.Order) (int, error) {
 }
 
 func (os *OrderRepository) SubmitOrder(models.Order) {
-	return
+
 }
 
 func (os *OrderRepository) ChangeOrderStatus(models.Order, string) error {
@@ -62,5 +62,9 @@ func (os *OrderRepository) ChangeOrderStatus(models.Order, string) error {
 }
 
 func (os *OrderRepository) ValidateUserPassword(int, string) error {
+	return nil
+}
+
+func validateOrderBelongToUser() error {
 	return nil
 }
