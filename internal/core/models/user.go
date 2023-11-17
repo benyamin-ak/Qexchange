@@ -1,12 +1,12 @@
 package models
 
 type User struct {
-	ID                    int `gorm:"primaryKey"`
+	ID                    int
 	firstName             string
 	lastName              string
 	age                   int
 	nationalCode          string
-	authenticationLevelID string `gorm:"foreignKey:authenticationLevels"`
+	authenticationLevelID string
 	mobileNumber          string
 	email                 string
 	accountTypeID         string
