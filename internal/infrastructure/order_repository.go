@@ -26,8 +26,13 @@ func (os *OrderRepository) GetUserBalance(userID int, coinID int) (float64, erro
 	return b, nil
 }
 
-func (os *OrderRepository) GetCoinPrice(int) (float64, error) {
-	return 0, nil
+func (os *OrderRepository) GetCoinPrice(coinID int) (float64, error) {
+	p := -1.0
+	os.DB.Model(&models.MockCoinPrice{}).Where("id = ?", coinID).Select("price").Scan(&p)
+	if p == -1.0 {
+		return 0, errors.New("coin not found")
+	}
+	return p, nil
 }
 
 func (os *OrderRepository) GetCoinCommission(int) (float64, error) {
