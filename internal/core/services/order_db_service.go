@@ -22,7 +22,11 @@ func (os *OrderDBService) GetCoinCommission(int) (float64, error) {
 	return 0, nil
 }
 
-func (os *OrderDBService) CommitOrder(models.Order) (int, error) {
+func (os *OrderDBService) CreateOrder(models.Order) (int, error) {
+	return 0, nil
+}
+
+func (os *OrderDBService) SubmitOrder(models.Order) (int, error) {
 	return 0, nil
 }
 
