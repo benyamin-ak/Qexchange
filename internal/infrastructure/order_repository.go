@@ -2,38 +2,38 @@ package services
 
 import "Qexchange/internal/core/models"
 
-type OrderDBService struct {
+type OrderRepository struct {
 	//infrastructure.OrderDBRepository
 }
 
-func NewOrderRepository() *OrderDBService {
-	return &OrderDBService{}
+func NewOrderRepository() *OrderRepository {
+	return &OrderRepository{}
 }
 
-func (os *OrderDBService) GetUserBalance(int, int) (float64, error) {
+func (os *OrderRepository) GetUserBalance(int, int) (float64, error) {
 	return 0, nil
 }
 
-func (os *OrderDBService) GetCoinPrice(int) (float64, error) {
+func (os *OrderRepository) GetCoinPrice(int) (float64, error) {
 	return 0, nil
 }
 
-func (os *OrderDBService) GetCoinCommission(int) (float64, error) {
+func (os *OrderRepository) GetCoinCommission(int) (float64, error) {
 	return 0, nil
 }
 
-func (os *OrderDBService) CreateOrder(models.Order) (int, error) {
+func (os *OrderRepository) CreateOrder(models.Order) (int, error) {
 	return 0, nil
 }
 
-func (os *OrderDBService) SubmitOrder(models.Order) {
+func (os *OrderRepository) SubmitOrder(models.Order) {
 	return
 }
 
-func (os *OrderDBService) ChangeOrderStatus(models.Order, int) error {
+func (os *OrderRepository) ChangeOrderStatus(models.Order, int) error {
 	return nil
 }
 
-func (os *OrderDBService) ValidateUserPassword(int, string) error {
+func (os *OrderRepository) ValidateUserPassword(int, string) error {
 	return nil
 }
