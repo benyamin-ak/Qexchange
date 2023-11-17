@@ -41,7 +41,7 @@ func (os *OrderService) Buy(userID int, coinID int, amount float64) (int, error)
 	}
 	o.Price = price
 	_ = commission
-	if balance < amount*price {
+	if balance < (1+commission)*amount*price {
 		os.dbc.ChangeOrderStatus(o, models.OrderStatusCancelled)
 		return math.MinInt, errors.New("insufficient funds")
 	}
@@ -65,8 +65,7 @@ func (os *OrderService) Sell(userID int, coinID int, amount float64) (int, error
 		return math.MinInt, err
 	}
 	o.Price = price
-	_ = commission
-	if balance < amount {
+	if balance < (1+commission)*amount {
 		os.dbc.ChangeOrderStatus(o, models.OrderStatusCancelled)
 		return math.MinInt, errors.New("insufficient funds")
 	}
