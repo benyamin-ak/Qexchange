@@ -3,6 +3,7 @@ package services
 import (
 	"Qexchange/internal/core/contracts"
 	"Qexchange/internal/core/models"
+	"Qexchange/internal/infrastructure"
 	"errors"
 	"math"
 	"time"
@@ -14,7 +15,7 @@ type OrderService struct {
 
 func NewOrderService() *OrderService {
 	return &OrderService{
-		dbc: NewOrderDBService(),
+		dbc: infrastructure.NewOrderRepository(),
 	}
 }
 
