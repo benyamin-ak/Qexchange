@@ -52,6 +52,9 @@ func (oh *OrderHandler) Buy(c echo.Context) error {
 	if err := c.Bind(or); err != nil {
 		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
 	}
+	if or.Amount <= 0 || or.UserID <= 0 || or.CoinID <= 0 {
+		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, fmt.Errorf("invalid request")))
+	}
 	orderID, err := oh.osc.Buy(or.UserID, or.CoinID, or.Amount)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
@@ -63,6 +66,9 @@ func (oh *OrderHandler) Sell(c echo.Context) error {
 	or := new(OrderRequest)
 	if err := c.Bind(or); err != nil {
 		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
+	}
+	if or.Amount <= 0 || or.UserID <= 0 || or.CoinID <= 0 {
+		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, fmt.Errorf("invalid request")))
 	}
 	orderID, err := oh.osc.Sell(or.UserID, or.CoinID, or.Amount)
 	if err != nil {
