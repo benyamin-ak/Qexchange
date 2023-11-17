@@ -57,7 +57,11 @@ func (os *OrderRepository) SubmitOrder(*models.Order) {
 
 }
 
-func (os *OrderRepository) ChangeOrderStatus(*models.Order, string) error {
+func (os *OrderRepository) ChangeOrderStatus(o *models.Order, status string) error {
+	err := os.DB.Model(&models.Order{}).Where("id = ?", o.OrderID).Update("status", status)
+	if err.Error != nil {
+		return err.Error
+	}
 	return nil
 }
 
