@@ -3,6 +3,7 @@ package controllers
 import (
 	"Qexchange/internal/core/contracts"
 	"Qexchange/internal/core/services"
+	"errors"
 	"fmt"
 	"math"
 	"net/http"
@@ -53,7 +54,7 @@ func (oh *OrderHandler) Buy(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
 	}
 	if or.Amount <= 0 || or.UserID <= 0 || or.CoinID <= 0 {
-		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, fmt.Errorf("invalid request")))
+		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, errors.New("invalid request")))
 	}
 	orderID, err := oh.osc.Buy(or.UserID, or.CoinID, or.Amount)
 	if err != nil {
@@ -68,7 +69,7 @@ func (oh *OrderHandler) Sell(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
 	}
 	if or.Amount <= 0 || or.UserID <= 0 || or.CoinID <= 0 {
-		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, fmt.Errorf("invalid request")))
+		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, errors.New("invalid request")))
 	}
 	orderID, err := oh.osc.Sell(or.UserID, or.CoinID, or.Amount)
 	if err != nil {
@@ -81,6 +82,9 @@ func (oh *OrderHandler) Cancel(c echo.Context) error {
 	cr := new(CancelRequest)
 	if err := c.Bind(cr); err != nil {
 		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
+	}
+	if cr.UserID <= 0 || cr.OrderID <= 0 || cr.UserPassword == "" {
+		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, errors.New("invalid request")))
 	}
 	err := oh.osc.Cancel(cr.UserID, cr.OrderID, cr.UserPassword)
 	if err != nil {
