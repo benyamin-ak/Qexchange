@@ -2,12 +2,13 @@ package infrastructure
 
 import (
 	"Qexchange/internal/core/models"
+	"errors"
 
 	"gorm.io/gorm"
 )
 
 type OrderRepository struct {
-	gormDB *gorm.DB
+	DB *gorm.DB
 }
 
 func NewOrderRepository() *OrderRepository {
@@ -16,8 +17,13 @@ func NewOrderRepository() *OrderRepository {
 	}
 }
 
-func (os *OrderRepository) GetUserBalance(int, int) (float64, error) {
-	return 0, nil
+func (os *OrderRepository) GetUserBalance(userID int, coinID int) (float64, error) {
+	b := -1.0
+	os.DB.Model(&models.User{}).Where("id = ?", userID).Select("balance").Scan(&b)
+	if b == -1.0 {
+		return 0, errors.New("user not found")
+	}
+	return b, nil
 }
 
 func (os *OrderRepository) GetCoinPrice(int) (float64, error) {
