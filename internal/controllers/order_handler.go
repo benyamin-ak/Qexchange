@@ -29,7 +29,7 @@ type Response struct {
 func NewResponse(orderID int, err error) Response {
 	return Response{
 		OrderID: orderID,
-		Error:   "",
+		Error:   err.Error(),
 	}
 }
 
