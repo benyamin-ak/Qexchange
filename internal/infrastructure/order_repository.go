@@ -35,8 +35,13 @@ func (os *OrderRepository) GetCoinPrice(coinID int) (float64, error) {
 	return p, nil
 }
 
-func (os *OrderRepository) GetCoinCommission(int) (float64, error) {
-	return 0, nil
+func (os *OrderRepository) GetCoinCommission(coinID int) (float64, error) {
+	c := -1.0
+	os.DB.Model(&models.Commission{}).Where("coin_id = ?", coinID).Select("rate").Scan(&c)
+	if c == -1.0 {
+		return 0, errors.New("coin not found")
+	}
+	return c, nil
 }
 
 func (os *OrderRepository) CreateOrder(models.Order) (int, error) {
