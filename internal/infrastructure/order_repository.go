@@ -1,4 +1,4 @@
-package services
+package infrastructure
 
 import "Qexchange/internal/core/models"
 
