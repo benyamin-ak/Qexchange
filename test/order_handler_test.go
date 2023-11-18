@@ -1,7 +1,7 @@
 package test
 
 import (
-	"Qexchange/internal/controllers"
+	"Qexchange/internal/controllers/ordering"
 	"encoding/json"
 	"math"
 	"net/http"
@@ -14,7 +14,7 @@ import (
 
 func Setup() {
 	e := echo.New()
-	controllers.DefineRoutes(e)
+	ordering.DefineRoutes(e)
 	e.Start(":8080")
 }
 
@@ -24,11 +24,11 @@ func TestMain(m *testing.M) {
 }
 func TestOrderHandlerBuyInvalidRequest(t *testing.T) {
 	requests := []string{`{"user_id": 1,"coin_id": 1}`, `{"user_id": 1,"amount": 1}`, `{"coin_id": 1,"amount": 1}`}
-	responses := make([]*controllers.Response, len(requests))
+	responses := make([]*ordering.Response, len(requests))
 	for i, req := range requests {
 		resp, err := invalidReqGenertor(req)
 		assert.Nil(t, err)
-		responses[i] = &controllers.Response{}
+		responses[i] = &ordering.Response{}
 		err = json.NewDecoder(resp.Body).Decode(responses[i])
 		assert.Nil(t, err)
 		assert.Equal(t, math.MinInt, responses[i].OrderID)
@@ -41,11 +41,11 @@ func invalidReqGenertor(req string) (*http.Response, error) {
 
 func TestOrderHandlerSellInvalidRequest(t *testing.T) {
 	requests := []string{`{"user_id": 1,"coin_id": 1}`, `{"user_id": 1,"amount": 1}`, `{"coin_id": 1,"amount": 1}`}
-	responses := make([]*controllers.Response, len(requests))
+	responses := make([]*ordering.Response, len(requests))
 	for i, req := range requests {
 		resp, err := invalidReqGenertor(req)
 		assert.Nil(t, err)
-		responses[i] = &controllers.Response{}
+		responses[i] = &ordering.Response{}
 		err = json.NewDecoder(resp.Body).Decode(responses[i])
 		assert.Nil(t, err)
 		assert.Equal(t, math.MinInt, responses[i].OrderID)
@@ -55,11 +55,11 @@ func TestOrderHandlerSellInvalidRequest(t *testing.T) {
 
 func TestOrderHandlerCancelInvalidRequest(t *testing.T) {
 	requests := []string{`{"user_id": 1,"order_id": 1}`, `{"user_id": 1,"user_password": "123456"}`, `{"order_id": 1,"user_password": "123456"}`}
-	responses := make([]*controllers.Response, len(requests))
+	responses := make([]*ordering.Response, len(requests))
 	for i, req := range requests {
 		resp, err := invalidReqGenertor(req)
 		assert.Nil(t, err)
-		responses[i] = &controllers.Response{}
+		responses[i] = &ordering.Response{}
 		err = json.NewDecoder(resp.Body).Decode(responses[i])
 		assert.Nil(t, err)
 		assert.Equal(t, math.MinInt, responses[i].OrderID)

@@ -1,6 +1,6 @@
-package contracts
+package ordering
 
-import "Qexchange/internal/core/models"
+import "Qexchange/internal/core/ordering/models"
 
 type OrderCoreContract interface {
 	Buy(int, int, float64) (int, error)

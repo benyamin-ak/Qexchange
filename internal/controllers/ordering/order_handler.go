@@ -1,8 +1,7 @@
-package controllers
+package ordering
 
 import (
-	"Qexchange/internal/core/contracts"
-	"Qexchange/internal/core/services"
+	"Qexchange/internal/core/ordering"
 	"errors"
 	"fmt"
 	"math"
@@ -39,12 +38,12 @@ func NewResponse(orderID int, err error) Response {
 }
 
 type OrderHandler struct {
-	osc contracts.OrderCoreContract
+	osc ordering.OrderCoreContract
 }
 
 func NewOrderHandler() *OrderHandler {
 	return &OrderHandler{
-		osc: services.NewOrderService(),
+		osc: ordering.NewOrderService(),
 	}
 }
 

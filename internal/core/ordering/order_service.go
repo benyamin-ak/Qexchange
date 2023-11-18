@@ -1,21 +1,20 @@
-package services
+package ordering
 
 import (
-	"Qexchange/internal/core/contracts"
-	"Qexchange/internal/core/models"
-	"Qexchange/internal/infrastructure"
+	"Qexchange/internal/core/ordering/models"
+	"Qexchange/internal/infrastructure/ordering"
 	"errors"
 	"math"
 	"time"
 )
 
 type OrderService struct {
-	dbc contracts.OrderDBContract
+	dbc OrderDBContract
 }
 
 func NewOrderService() *OrderService {
 	return &OrderService{
-		dbc: infrastructure.NewOrderRepository(),
+		dbc: ordering.NewOrderRepository(),
 	}
 }
 

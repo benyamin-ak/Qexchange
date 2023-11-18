@@ -1,7 +1,7 @@
-package infrastructure
+package ordering
 
 import (
-	"Qexchange/internal/core/models"
+	"Qexchange/internal/core/ordering/models"
 	"errors"
 
 	"gorm.io/gorm"

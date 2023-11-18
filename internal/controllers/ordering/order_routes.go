@@ -1,4 +1,4 @@
-package controllers
+package ordering
 
 import echo "github.com/labstack/echo/v4"
 
