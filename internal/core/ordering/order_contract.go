@@ -5,7 +5,7 @@ import "Qexchange/internal/core/ordering/models"
 type OrderCoreContract interface {
 	Buy(int, int, float64) (int, error)
 	Sell(int, int, float64) (int, error)
-	Cancel(int, int, string) error
+	Cancel(int, int) error
 }
 
 type OrderDBContract interface {
@@ -15,5 +15,4 @@ type OrderDBContract interface {
 	CreateOrder(*models.Order) (int, error)
 	SubmitOrder(*models.Order)
 	ChangeOrderStatus(*models.Order, string) error
-	ValidateUserPassword(int, string) error
 }

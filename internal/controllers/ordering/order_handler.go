@@ -17,9 +17,8 @@ type OrderRequest struct {
 }
 
 type CancelRequest struct {
-	UserID       int    `json:"user_id"`
-	OrderID      int    `json:"order_id"`
-	UserPassword string `json:"user_password"`
+	UserID  int `json:"user_id"`
+	OrderID int `json:"order_id"`
 }
 
 type Response struct {
@@ -82,10 +81,10 @@ func (oh *OrderHandler) Cancel(c echo.Context) error {
 	if err := c.Bind(cr); err != nil {
 		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
 	}
-	if cr.UserID <= 0 || cr.OrderID <= 0 || cr.UserPassword == "" {
+	if cr.UserID <= 0 || cr.OrderID <= 0 {
 		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, errors.New("invalid request")))
 	}
-	err := oh.osc.Cancel(cr.UserID, cr.OrderID, cr.UserPassword)
+	err := oh.osc.Cancel(cr.UserID, cr.OrderID)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, NewResponse(math.MinInt, err))
 	}

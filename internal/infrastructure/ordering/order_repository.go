@@ -13,7 +13,7 @@ type OrderRepository struct {
 
 func NewOrderRepository() *OrderRepository {
 	return &OrderRepository{
-		// gorm connection
+		//DB = gorm connection
 	}
 }
 
@@ -84,10 +84,6 @@ func (os *OrderRepository) ChangeOrderStatus(o *models.Order, status string) err
 	if err.Error != nil {
 		return err.Error
 	}
-	return nil
-}
-
-func (os *OrderRepository) ValidateUserPassword(int, string) error {
 	return nil
 }
 
