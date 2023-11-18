@@ -18,39 +18,38 @@ func NewOrderRepository() *OrderRepository {
 }
 
 func (os *OrderRepository) GetUserBalance(userID int, coinID int) (float64, error) {
-	b := -1.0
-	os.DB.Table("user").Where("id = ?", userID).Select("balance").Scan(&b)
-	if b == -1.0 {
-		return 0, errors.New("user not found")
+	var b float64
+	err := os.DB.Table("user").Where("id = ?", userID).Select("balance").Scan(&b)
+	if err.Error != nil {
+		return 0, err.Error
 	}
 	return b, nil
 }
 
 func (os *OrderRepository) GetCoinPrice(coinID int) (float64, error) {
-	p := -1.0
-	os.DB.Table("mock_coin_price").Where("id = ?", coinID).Select("price").Scan(&p)
-	if p == -1.0 {
-		return 0, errors.New("coin not found")
+	var p float64
+	err := os.DB.Table("mock_coin_price").Where("id = ?", coinID).Select("price").Scan(&p)
+	if err.Error != nil {
+		return 0, err.Error
 	}
 	return p, nil
 }
 
 func (os *OrderRepository) GetCoinCommission(coinID int) (float64, error) {
-	c := -1.0
-	os.DB.Table("commission").Where("coin_id = ?", coinID).Select("rate").Scan(&c)
-	if c == -1.0 {
-		return 0, errors.New("coin not found")
+	var c float64
+	err := os.DB.Table("commission").Where("coin_id = ?", coinID).Select("rate").Scan(&c)
+	if err.Error != nil {
+		return 0, err.Error
 	}
 	return c, nil
 }
 
 func (os *OrderRepository) CreateOrder(o *models.Order) (int, error) {
-	ID := -1
-	os.DB.Create(&o).Select("max(id)").Scan(&ID)
-	if ID == -1 {
-		return 0, errors.New("create order failed")
+	err := os.DB.Table("order").Create(o)
+	if err.Error != nil {
+		return 0, err.Error
 	}
-	return ID, nil
+	return o.OrderID, nil
 }
 
 func (os *OrderRepository) SubmitOrder(*models.Order) {
@@ -58,7 +57,7 @@ func (os *OrderRepository) SubmitOrder(*models.Order) {
 }
 
 func (os *OrderRepository) ChangeOrderStatus(o *models.Order, status string) error {
-	err := os.DB.Model(&models.Order{}).Where("id = ?", o.OrderID).Update("status", status)
+	err := os.DB.Table("order").Where("id = ?", o.OrderID).Update("status", status)
 	if err.Error != nil {
 		return err.Error
 	}
