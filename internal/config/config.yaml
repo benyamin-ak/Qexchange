@@ -1,0 +1,14 @@
+# IPG configuration
+payment_gateway:
+  TerminalId: 134755071
+  MerchantId: 1183
+
+# database configuration
+database:  
+  driver: mysql
+  host: "localhost"
+  port: 3306
+  db: qexchanger
+  username: root
+  password: Ab@12344321
+  charset: "utf8mb4"
