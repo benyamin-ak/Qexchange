@@ -52,8 +52,31 @@ func (os *OrderRepository) CreateOrder(o *models.Order) (int, error) {
 	return o.OrderID, nil
 }
 
-func (os *OrderRepository) SubmitOrder(*models.Order) {
-
+func (os *OrderRepository) SubmitOrder(o *models.Order) {
+	c, _ := os.GetCoinCommission(o.CoinID)
+	balanceToDeduct := (1 + c) * o.Quantity * o.Price
+	os.DB.Transaction(func(db *gorm.DB) error {
+		if o.Side == "buy" {
+			err := db.Table("asset").Where("user_id = ? AND coin_id = ?", o.UserID, 0 /*IRR coinID*/).Update("balance", gorm.Expr("balance - ?", balanceToDeduct))
+			if err.Error != nil {
+				return err.Error
+			}
+			err = db.Table("asset").Where("user_id = ? AND coin_id = ?", o.UserID, o.CoinID).Update("balance", gorm.Expr("balance + ?", o.Quantity))
+			if err.Error != nil {
+				return err.Error
+			}
+		} else {
+			err := db.Table("asset").Where("user_id = ? AND coin_id = ?", o.UserID, o.CoinID).Update("balance", gorm.Expr("balance - ?", balanceToDeduct))
+			if err.Error != nil {
+				return err.Error
+			}
+			err = db.Table("asset").Where("user_id = ? AND coin_id = ?", o.UserID, 0 /*IRR coinID*/).Update("balance", gorm.Expr("balance + ?", o.Quantity*o.Price))
+			if err.Error != nil {
+				return err.Error
+			}
+		}
+		return nil
+	})
 }
 
 func (os *OrderRepository) ChangeOrderStatus(o *models.Order, status string) error {
