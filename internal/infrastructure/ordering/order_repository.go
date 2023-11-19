@@ -2,6 +2,7 @@ package ordering
 
 import (
 	"Qexchange/internal/core/ordering/models"
+	"Qexchange/internal/infrastructure"
 	"errors"
 
 	"gorm.io/gorm"
@@ -19,7 +20,7 @@ func NewOrderRepository() *OrderRepository {
 
 func (os *OrderRepository) GetUserBalance(userID int, coinID int) (float64, error) {
 	var b float64
-	err := os.DB.Table("user").Where("id = ?", userID).Select("balance").Scan(&b)
+	err := os.DB.Table(infrastructure.AssetTable).Where("user_id = ? AND coin_id = ?", userID, coinID).Select("quantity").Scan(&b)
 	if err.Error != nil {
 		return 0, err.Error
 	}
