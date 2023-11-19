@@ -29,7 +29,7 @@ func (os *OrderRepository) GetUserBalance(userID int, coinID int) (float64, erro
 
 func (os *OrderRepository) GetCoinPrice(coinID int) (float64, error) {
 	var p float64
-	err := os.DB.Table("mock_coin_price").Where("id = ?", coinID).Select("price").Scan(&p)
+	err := os.DB.Table(infrastructure.CoinPrices).Where("coin_id = ?", coinID).Select("price").Scan(&p)
 	if err.Error != nil {
 		return 0, err.Error
 	}
@@ -38,7 +38,7 @@ func (os *OrderRepository) GetCoinPrice(coinID int) (float64, error) {
 
 func (os *OrderRepository) GetCoinCommission(coinID int) (float64, error) {
 	var c float64
-	err := os.DB.Table("commission").Where("coin_id = ?", coinID).Select("rate").Scan(&c)
+	err := os.DB.Table(infrastructure.CommissionTable).Where("coin_id = ?", coinID).Select("rate").Scan(&c)
 	if err.Error != nil {
 		return 0, err.Error
 	}
@@ -46,7 +46,8 @@ func (os *OrderRepository) GetCoinCommission(coinID int) (float64, error) {
 }
 
 func (os *OrderRepository) CreateOrder(o *models.Order) (int, error) {
-	err := os.DB.Table("order").Create(o)
+	//ID ???
+	err := os.DB.Table(infrastructure.OrderTable).Create(o)
 	if err.Error != nil {
 		return 0, err.Error
 	}
@@ -81,7 +82,7 @@ func (os *OrderRepository) SubmitOrder(o *models.Order) {
 }
 
 func (os *OrderRepository) ChangeOrderStatus(o *models.Order, status string) error {
-	err := os.DB.Table("order").Where("id = ?", o.OrderID).Update("status", status)
+	err := os.DB.Table(infrastructure.OrderTable).Where("id = ?", o.OrderID).Update("status", status)
 	if err.Error != nil {
 		return err.Error
 	}
@@ -90,7 +91,7 @@ func (os *OrderRepository) ChangeOrderStatus(o *models.Order, status string) err
 
 func (os *OrderRepository) validateOrderBelongToUser(o *models.Order, userID int) error {
 	order := &models.Order{}
-	os.DB.Table("order").Where("id = ?", o.OrderID).Scan(&order)
+	os.DB.Table(infrastructure.OrderTable).Where("id = ?", o.OrderID).Scan(&order)
 	if order.UserID != userID {
 		return errors.New("order does not belong to user")
 	}
