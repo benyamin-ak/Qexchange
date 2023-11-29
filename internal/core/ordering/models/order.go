@@ -1,16 +1,13 @@
 package models
 
-import "time"
-
 type Order struct {
-	OrderID   int
-	UserID    int
-	Side      string
-	Quantity  float64
-	Price     float64
-	CoinID    int
-	Timestamp time.Time
-	Status    string
+	OrderID  int     `gorm:"column:id"`
+	UserID   int     `gorm:"column:user_id"`
+	Side     string  `gorm:"column:side"`
+	Quantity float64 `gorm:"column:quantity"`
+	Price    float64 `gorm:"column:price"`
+	CoinID   int     `gorm:"column:coin_id"`
+	Status   string  `gorm:"column:status"`
 }
 
 const (
