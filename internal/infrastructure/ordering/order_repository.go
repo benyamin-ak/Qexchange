@@ -59,20 +59,20 @@ func (os *OrderRepository) SubmitOrder(o *models.Order) {
 	balanceToDeduct := (1 + c) * o.Quantity * o.Price
 	os.DB.Transaction(func(db *gorm.DB) error {
 		if o.Side == "buy" {
-			err := db.Table("asset").Where("user_id = ? AND coin_id = ?", o.UserID, 0 /*IRR coinID*/).Update("balance", gorm.Expr("balance - ?", balanceToDeduct))
+			err := db.Table("assets").Where("user_id = ? AND coin_id = ?", o.UserID, 0 /*IRR coinID*/).Update("balance", gorm.Expr("balance - ?", balanceToDeduct))
 			if err.Error != nil {
 				return err.Error
 			}
-			err = db.Table("asset").Where("user_id = ? AND coin_id = ?", o.UserID, o.CoinID).Update("balance", gorm.Expr("balance + ?", o.Quantity))
+			err = db.Table("assets").Where("user_id = ? AND coin_id = ?", o.UserID, o.CoinID).Update("balance", gorm.Expr("balance + ?", o.Quantity))
 			if err.Error != nil {
 				return err.Error
 			}
 		} else {
-			err := db.Table("asset").Where("user_id = ? AND coin_id = ?", o.UserID, o.CoinID).Update("balance", gorm.Expr("balance - ?", balanceToDeduct))
+			err := db.Table("assets").Where("user_id = ? AND coin_id = ?", o.UserID, o.CoinID).Update("balance", gorm.Expr("balance - ?", balanceToDeduct))
 			if err.Error != nil {
 				return err.Error
 			}
-			err = db.Table("asset").Where("user_id = ? AND coin_id = ?", o.UserID, 0 /*IRR coinID*/).Update("balance", gorm.Expr("balance + ?", o.Quantity*o.Price))
+			err = db.Table("assets").Where("user_id = ? AND coin_id = ?", o.UserID, 0 /*IRR coinID*/).Update("balance", gorm.Expr("balance + ?", o.Quantity*o.Price))
 			if err.Error != nil {
 				return err.Error
 			}
@@ -89,7 +89,7 @@ func (os *OrderRepository) ChangeOrderStatus(o *models.Order, status string) err
 	return nil
 }
 
-func (os *OrderRepository) validateOrderBelongToUser(o *models.Order, userID int) error {
+func (os *OrderRepository) ValidateOrderBelongToUser(o *models.Order, userID int) error {
 	order := &models.Order{}
 	os.DB.Table(infrastructure.OrderTable).Where("id = ?", o.OrderID).Scan(&order)
 	if order.UserID != userID {
