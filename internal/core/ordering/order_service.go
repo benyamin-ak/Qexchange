@@ -5,7 +5,6 @@ import (
 	"Qexchange/internal/infrastructure/ordering"
 	"errors"
 	"math"
-	"time"
 )
 
 type OrderService struct {
@@ -20,12 +19,11 @@ func NewOrderService() *OrderService {
 
 func (os *OrderService) Buy(userID int, coinID int, amount float64) (int, error) {
 	o := &models.Order{
-		UserID:    userID,
-		Side:      "buy",
-		CoinID:    coinID,
-		Quantity:  amount,
-		Timestamp: time.Now(),
-		Status:    models.OrderStatusActive,
+		UserID:   userID,
+		Side:     "buy",
+		CoinID:   coinID,
+		Quantity: amount,
+		Status:   models.OrderStatusActive,
 	}
 	ID, err := os.dbc.CreateOrder(o)
 	o.OrderID = ID
@@ -48,12 +46,11 @@ func (os *OrderService) Buy(userID int, coinID int, amount float64) (int, error)
 
 func (os *OrderService) Sell(userID int, coinID int, amount float64) (int, error) {
 	o := &models.Order{
-		UserID:    userID,
-		Side:      "sell",
-		CoinID:    coinID,
-		Quantity:  amount,
-		Timestamp: time.Now(),
-		Status:    models.OrderStatusActive,
+		UserID:   userID,
+		Side:     "sell",
+		CoinID:   coinID,
+		Quantity: amount,
+		Status:   models.OrderStatusActive,
 	}
 	ID, err := os.dbc.CreateOrder(o)
 	o.OrderID = ID
