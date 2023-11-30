@@ -13,9 +13,9 @@ type AutoOrderHandler struct {
 	oac ordering.AutoOrderContract
 }
 
-func NewAutoOrderHandler(UserID int, CoinID int, Quantity float64, Side string, pts float64) *AutoOrderHandler {
+func NewAutoOrderHandler() *AutoOrderHandler {
 	return &AutoOrderHandler{
-		oac: ordering.NewAutoOrderService(UserID, CoinID, Quantity, Side, pts),
+		oac: ordering.NewAutoOrderService(),
 	}
 }
 
@@ -27,6 +27,6 @@ func (aoh *AutoOrderHandler) CreateNewAutoOrderHandler(c echo.Context) error {
 	if aor.Quantity <= 0 || aor.UserID <= 0 || aor.CoinID <= 0 || aor.PTS <= 0 || (aor.Side != "buy" && aor.Side != "sell") {
 		return c.JSON(http.StatusBadRequest, NewOrderResponse(math.MinInt, errors.New("invalid request")))
 	}
-	aoh.oac.StartPolling()
+	aoh.oac.StartPolling(aor.UserID, aor.CoinID, aor.Quantity, aor.Side, aor.PTS)
 	return c.JSON(http.StatusOK, NewOrderResponse(0, nil))
 }

@@ -9,7 +9,7 @@ type OrderCoreContract interface {
 }
 
 type AutoOrderContract interface {
-	StartPolling()
+	StartPolling(int, int, float64, string, float64)
 }
 
 type OrderDBContract interface {

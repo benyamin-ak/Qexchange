@@ -14,23 +14,21 @@ type AutoOrderService struct {
 	Done          bool
 }
 
-func NewAutoOrderService(UserID int, CoinID int, Quantity float64, Side string, pts float64) *AutoOrderService {
+func NewAutoOrderService() *AutoOrderService {
 	return &AutoOrderService{
 		occ: NewOrderService(),
 		odc: ordering.NewOrderRepository(),
-		order: &models.Order{
-			UserID:   UserID,
-			Side:     Side,
-			CoinID:   CoinID,
-			Quantity: Quantity,
-			Status:   models.OrderStatusActive,
-		},
-		PriceToSubmit: pts,
-		Done:          false,
 	}
 }
 
-func (aos *AutoOrderService) StartPolling() {
+func (aos *AutoOrderService) StartPolling(UserID int, CoinID int, Quantity float64, Side string, pts float64) {
+	aos.order = &models.Order{
+		UserID:   UserID,
+		CoinID:   CoinID,
+		Quantity: Quantity,
+		Side:     Side,
+		Status:   models.OrderStatusActive,
+	}
 	go aos.CheckOrders()
 }
 
