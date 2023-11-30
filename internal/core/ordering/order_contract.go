@@ -8,6 +8,10 @@ type OrderCoreContract interface {
 	Cancel(int, int) error
 }
 
+type AutoOrderContract interface {
+	StartPolling()
+}
+
 type OrderDBContract interface {
 	GetUserBalance(int, int) (float64, error)
 	GetCoinPrice(int) (float64, error)

@@ -17,3 +17,11 @@ type OrderResponse struct {
 	OrderID int    `json:"order_id"`
 	Error   string `json:"error"`
 }
+
+type AutoOrderRequest struct {
+	UserID   int     `json:"user_id"`
+	CoinID   int     `json:"coin_id"`
+	Quantity float64 `json:"quantity"`
+	Side     string  `json:"side"`
+	PTS      float64 `json:"pts"`
+}
