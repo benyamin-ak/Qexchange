@@ -42,7 +42,7 @@ var or *ordering.OrderRepository
 
 func DBSetup() *ordering.OrderRepository {
 	or := ordering.NewOrderRepository()
-	dsn := "root:963233@tcp(127.0.0.1:3306)/Qexchange?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "connection config"
 	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
